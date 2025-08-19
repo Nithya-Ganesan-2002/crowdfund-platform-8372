@@ -1,14 +1,35 @@
 const express = require('express');
 const healthController = require('../controllers/health');
 
+const authRoutes = require('./auth');
+const projectsRoutes = require('./projects');
+const pledgesRoutes = require('./pledges');
+
 const router = express.Router();
-// Health endpoint
+
+/**
+ * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   - name: Health
+ *     description: Service health check
+ */
 
 /**
  * @swagger
  * /:
  *   get:
  *     summary: Health endpoint
+ *     tags: [Health]
  *     responses:
  *       200:
  *         description: Service health check passed
@@ -31,5 +52,10 @@ const router = express.Router();
  *                   example: development
  */
 router.get('/', healthController.check.bind(healthController));
+
+// Mount feature routes
+router.use('/auth', authRoutes);
+router.use('/projects', projectsRoutes);
+router.use('/pledges', pledgesRoutes);
 
 module.exports = router;
